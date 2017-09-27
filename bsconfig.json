@@ -1,0 +1,10 @@
+{
+  "name": "awesome-ml",
+  "version": "0.1.0",
+  "sources": [
+    "src"
+  ],
+  "bs-dependencies" : [
+      // add your bs-dependencies here 
+  ]
+}
