@@ -47,11 +47,20 @@ module R = Random
 
 let pi_known = 3.141592653589793238462643383279502884197169399375105820974944592307816406286
 
+(* OCaml supports new data types as easy as the following for 2D points Euclidean space *)
 type point = {x:float; y:float;}
 
+(* with the new type we can define the origin easily*)
 let origin =  {x=0.0; y=0.0}
 
-let distance_between_points p q =  (p.x -. q.x) *. (p.x -. q.x) +. (p.y -. q.y) *. (p.y -. q.y)
+(*  Euclidean distance between two 2D points https://en.wikipedia.org/wiki/Euclidean_distance#Two_dimensions
+ *
+ *  Interestingly using the x ** 2.0 form of power of two is much slower than x .* x (to be investigated)
+ *
+ *)
+let distance_between_points p q =
+  (q.x -. p.x) *. (q.x -. p.x)  +. (q.y -. p.y) *. (q.y -. p.y)
+  |> sqrt
 
 let distance_from_origin p = distance_between_points p origin
 
