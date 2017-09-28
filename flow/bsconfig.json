@@ -1,12 +1,12 @@
 {
-  "name" : "react",
+  "name" : "flow",
   "reason" : {"react-jsx" : 2},
   "bsc-flags": ["-bs-super-errors"],
   "bs-dependencies": ["reason-react"],
   "sources": [
     {
       "dir": "src",
-      "subdirs": ["app0"]
+      "subdirs": ["async", "flow", "sierpinski"]
     }
   ],
   "namespace": true
