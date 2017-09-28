@@ -20,7 +20,7 @@ let make _children => {
   }),
   render: fun self => {
     <div>
-      <button onClick=(self.reduce dec)> (stringToElement "-") </button>
+      <button className="button blue" onClick=(self.reduce inc)> (stringToElement " + ") </button>
       <div>(
         "Balance :: "
         ^ (self.state.balance |> string_of_int)
@@ -33,7 +33,7 @@ let make _children => {
         |> stringToElement
       )
       </div>
-      <button onClick=(self.reduce inc)> (stringToElement "+") </button>
+      <button className="button blue" onClick=(self.reduce dec)> (stringToElement " - ") </button>
     </div>
   }
 };
