@@ -1,0 +1,13 @@
+{
+  "name" : "react",
+  "reason" : {"react-jsx" : 2},
+  "bsc-flags": ["-bs-super-errors"],
+  "bs-dependencies": ["reason-react"],
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": ["app0", "app1"]
+    }
+  ],
+  "namespace": true
+}

@@ -12,5 +12,8 @@
   "license": "MIT",
   "devDependencies": {
     "bs-platform": "1.9.2"
+  },
+  "dependencies": {
+    "simplex-noise": "^2.3.0"
   }
 }

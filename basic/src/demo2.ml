@@ -11,7 +11,7 @@
    *      example: a := !a + 1
    *
    *
-   * *)
+   *  *)
 
 (* *
    *  Files, modules and interfaces
@@ -69,7 +69,7 @@ let distance_from_origin p = distance_between_points p origin
 let find_pi ~number_of_samples:s =
   Random.self_init();
   let within = ref 0 in
-  for i = 1 to s do
+  for _ = 1 to s do
     let xr = R.float 1.0 in
     let yr = R.float 1.0 in
     let p = {x=xr; y=yr} in

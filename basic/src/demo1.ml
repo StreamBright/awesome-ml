@@ -1,10 +1,11 @@
 (* map & reduce,
  * the |> operator represents reverse function application,  f |> g = g f
+ * just like Unix pipes
  *)
 
-let fff l =
-  List.map (fun x -> x) l
+let square_sum l =
+  List.map (fun x -> x * x) l
   |> List.fold_left (+) 0
 
 let () =
-  Js.log (fff [1;2;3])
+  Js.log (square_sum [1;2;3])
