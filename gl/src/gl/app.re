@@ -5,52 +5,52 @@ type glCamera = {projectionMatrix: Gl.Mat4.t};
 type glEnv = {camera: glCamera, window: Gl.Window.t, context: Gl.contextT};
 
 let getCompiledCorrectly context::context shader::shader =>
-	Gl.getShaderParameter context::context shader::shader paramName::Gl.Compile_status == 1;
+  Gl.getShaderParameter context::context shader::shader paramName::Gl.Compile_status == 1;
 
 let compileShaders context::context shader::shader source::source => {
-	Gl.shaderSource context::context shader::shader source::source;
-	Gl.compileShader context::context shader;
-	getCompiledCorrectly context::context shader::shader;
+  Gl.shaderSource context::context shader::shader source::source;
+  Gl.compileShader context::context shader;
+  getCompiledCorrectly context::context shader::shader;
 };
 
 let linkProg ::context ::program ::vertexShader ::fragmentShader => {
-	Gl.attachShader ::context ::program shader::vertexShader;
-	Gl.deleteShader ::context vertexShader;
-	Gl.attachShader ::context ::program shader::fragmentShader;
-	Gl.deleteShader ::context fragmentShader;
-	Gl.linkProgram ::context program;
-	Gl.getProgramParameter ::context ::program paramName::Gl.Link_status == 1;
+  Gl.attachShader ::context ::program shader::vertexShader;
+  Gl.deleteShader ::context vertexShader;
+  Gl.attachShader ::context ::program shader::fragmentShader;
+  Gl.deleteShader ::context fragmentShader;
+  Gl.linkProgram ::context program;
+  Gl.getProgramParameter ::context ::program paramName::Gl.Link_status == 1;
 };
 
 let getProgram
-	context::(context: Gl.contextT) vertexShader::(vertexShaderSource: string)
-	fragmentShader::(fragmentShaderSource: string) :option Gl.programT => {
-		/* Starting with vertex shader */
-		let vertexShader = Gl.createShader ::context Constants.vertex_shader;
-		let compiledCorrectlyVertex = compileShaders context::context shader::vertexShader source::vertexShaderSource;
-		if compiledCorrectlyVertex {
-			/* Next is fragment shader */
-			let fragmentShader = Gl.createShader ::context Constants.fragment_shader;
-			let compiledCorrectlyFragment = compileShaders context::context shader::fragmentShader source::fragmentShaderSource;
-			if compiledCorrectlyFragment {
-				/*Finally linking all together*/
-				let program = Gl.createProgram ::context;
-				let linkedCorrectly = linkProg ::context ::program ::vertexShader ::fragmentShader;
-				if linkedCorrectly {
-					/*All good*/
-					Some program
-				} else {
-					print_endline @@ "Linking error: " ^ Gl.getProgramInfoLog ::context program;
-					None
-				}
-			} else {
-				print_endline @@ "Fragment shader error: " ^ Gl.getShaderInfoLog ::context fragmentShader;
-				None
-			}
-		} else {
-			print_endline @@ "Vertex shader error: " ^ Gl.getShaderInfoLog ::context vertexShader;
-			None
-		}
+  context::(context: Gl.contextT) vertexShader::(vertexShaderSource: string)
+  fragmentShader::(fragmentShaderSource: string) :option Gl.programT => {
+    /* Starting with vertex shader */
+    let vertexShader = Gl.createShader ::context Constants.vertex_shader;
+    let compiledCorrectlyVertex = compileShaders context::context shader::vertexShader source::vertexShaderSource;
+    if compiledCorrectlyVertex {
+      /* Next is fragment shader */
+      let fragmentShader = Gl.createShader ::context Constants.fragment_shader;
+      let compiledCorrectlyFragment = compileShaders context::context shader::fragmentShader source::fragmentShaderSource;
+      if compiledCorrectlyFragment {
+        /*Finally linking all together*/
+        let program = Gl.createProgram ::context;
+        let linkedCorrectly = linkProg ::context ::program ::vertexShader ::fragmentShader;
+        if linkedCorrectly {
+          /*All good*/
+          Some program
+        } else {
+          print_endline @@ "Linking error: " ^ Gl.getProgramInfoLog ::context program;
+          None
+        }
+      } else {
+        print_endline @@ "Fragment shader error: " ^ Gl.getShaderInfoLog ::context fragmentShader;
+        None
+      }
+    } else {
+      print_endline @@ "Vertex shader error: " ^ Gl.getShaderInfoLog ::context vertexShader;
+      None
+    }
 };
 
 /**
@@ -59,21 +59,21 @@ let getProgram
  * Fragment shader simply applies the color to the pixel.
  */
 let vertexShaderSource = {|
-	attribute vec3 aVertexPosition;
-	attribute vec4 aVertexColor;
-	uniform mat4 uPMatrix;
-	varying vec4 vColor;
-	void main(void) {
-		gl_Position = uPMatrix * vec4(aVertexPosition, 1.0);
-		vColor = aVertexColor;
-	}
+  attribute vec3 aVertexPosition;
+  attribute vec4 aVertexColor;
+  uniform mat4 uPMatrix;
+  varying vec4 vColor;
+  void main(void) {
+    gl_Position = uPMatrix * vec4(aVertexPosition, 1.0);
+    vColor = aVertexColor;
+  }
 |};
 
 let fragmentShaderSource = {|
-	varying vec4 vColor;
-	void main(void) {
-		gl_FragColor = vColor;
-	}
+  varying vec4 vColor;
+  void main(void) {
+    gl_FragColor = vColor;
+  }
 |};
 
 
@@ -105,12 +105,12 @@ let colorBuffer = Gl.createBuffer ::context;
 
 /** Compiles the shaders and gets the program with the shaders loaded into **/
 let program =
-	switch (
-		getProgram ::context vertexShader::vertexShaderSource fragmentShader::fragmentShaderSource
-	) {
-	| None => failwith "Could not create the program and/or the shaders. Aborting."
-	| Some program => program
-	};
+  switch (
+    getProgram ::context vertexShader::vertexShaderSource fragmentShader::fragmentShaderSource
+  ) {
+  | None => failwith "Could not create the program and/or the shaders. Aborting."
+  | Some program => program
+  };
 
 Gl.useProgram ::context program;
 
@@ -132,74 +132,74 @@ Gl.uniformMatrix4fv ::context location::pMatrixUniform value::camera.projectionM
  * https://shearer12345.github.io/graphics/assets/projectionPerspectiveVSOrthographic.png
  */
 Gl.Mat4.ortho
-	out::camera.projectionMatrix
-	left::0.
-	right::(float_of_int (Gl.Window.getWidth window))
-	bottom::0.
-	top::(float_of_int (Gl.Window.getHeight window))
-	near::0.
-	far::100.;
+  out::camera.projectionMatrix
+  left::0.
+  right::(float_of_int (Gl.Window.getWidth window))
+  bottom::0.
+  top::(float_of_int (Gl.Window.getHeight window))
+  near::0.
+  far::100.;
 
 
 /**
  * Render simply draws a rectangle.
  */
 let render _ => {
-	/* 0,0 is the bottom left corner */
-	let x = 150;
-	let y = 150;
-	let width = 300;
-	let height = 300;
+  /* 0,0 is the bottom left corner */
+  let x = 150;
+  let y = 150;
+  let width = 300;
+  let height = 300;
 
-	/**
-	 * Setup vertices to be sent to the GPU and bind the data on the "register" called `array_buffer`.
-	 */
-	let square_vertices = [|
-		float_of_int @@ x + width,	float_of_int @@ y + height,		0.0,
-		float_of_int x,							float_of_int @@ y + height,		0.0,
-		float_of_int @@ x + width,	float_of_int y,								0.0,
-		float_of_int x,							float_of_int y,								0.0
-	|];
-	/*Js.log square_vertices;*/
-	Gl.bindBuffer ::context target::Constants.array_buffer buffer::vertexBuffer;
-	Gl.bufferData
-		::context
-		target::Constants.array_buffer
-		data::Gl.Bigarray.(of_array Float32 square_vertices)
-		usage::Constants.static_draw;
-	Gl.vertexAttribPointer
-		::context
-		attribute::aVertexPosition
-		size::3
-		type_::Constants.float_
-		normalize::false
-		stride::0
-		offset::0;
+  /**
+   * Setup vertices to be sent to the GPU and bind the data on the "register" called `array_buffer`.
+   */
+  let square_vertices = [|
+    float_of_int @@ x + width,  float_of_int @@ y + height,   0.0,
+    float_of_int x,             float_of_int @@ y + height,   0.0,
+    float_of_int @@ x + width,  float_of_int y,               0.0,
+    float_of_int x,             float_of_int y,               0.0
+  |];
+  /*Js.log square_vertices;*/
+  Gl.bindBuffer ::context target::Constants.array_buffer buffer::vertexBuffer;
+  Gl.bufferData
+    ::context
+    target::Constants.array_buffer
+    data::Gl.Bigarray.(of_array Float32 square_vertices)
+    usage::Constants.static_draw;
+  Gl.vertexAttribPointer
+    ::context
+    attribute::aVertexPosition
+    size::3
+    type_::Constants.float_
+    normalize::false
+    stride::0
+    offset::0;
 
-	let square_colors = [|
-				1.0, 0.0, 0.0, 1.0,
-				0.0, 1.0, 0.0, 1.0,
-				0.0, 0.0, 1.0, 1.0,
-				0.0, 1.0, 0.0, 1.0
-	|];
-	Gl.bindBuffer ::context target::Constants.array_buffer buffer::colorBuffer;
-	Gl.bufferData
-		::context
-		target::Constants.array_buffer
-		data::Gl.Bigarray.(of_array Float32 square_colors)
-		usage::Constants.static_draw;
-	Gl.vertexAttribPointer
-		::context
-		attribute::aVertexColor
-		size::4
-		type_::Constants.float_
-		normalize::false
-		stride::0
-		offset::0;
-	Gl.uniformMatrix4fv ::context location::pMatrixUniform value::camera.projectionMatrix;
+  let square_colors = [|
+        1.0, 0.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+        0.0, 1.0, 0.0, 1.0
+  |];
+  Gl.bindBuffer ::context target::Constants.array_buffer buffer::colorBuffer;
+  Gl.bufferData
+    ::context
+    target::Constants.array_buffer
+    data::Gl.Bigarray.(of_array Float32 square_colors)
+    usage::Constants.static_draw;
+  Gl.vertexAttribPointer
+    ::context
+    attribute::aVertexColor
+    size::4
+    type_::Constants.float_
+    normalize::false
+    stride::0
+    offset::0;
+  Gl.uniformMatrix4fv ::context location::pMatrixUniform value::camera.projectionMatrix;
 
-	/** Final call which actually does the "draw" **/
-	Gl.drawArrays ::context mode::Constants.triangle_strip first::0 count::4
+  /** Final call which actually does the "draw" **/
+  Gl.drawArrays ::context mode::Constants.triangle_strip first::0 count::4
 };
 
 
