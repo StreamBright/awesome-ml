@@ -105,11 +105,9 @@ let colorBuffer = Gl.createBuffer ::context;
 
 /** Compiles the shaders and gets the program with the shaders loaded into **/
 let program =
-  switch (
-    getProgram ::context vertexShader::vertexShaderSource fragmentShader::fragmentShaderSource
-  ) {
-  | None => failwith "Could not create the program and/or the shaders. Aborting."
-  | Some program => program
+  switch (getProgram ::context vertexShader::vertexShaderSource fragmentShader::fragmentShaderSource) {
+    | None => failwith "Could not create the program and/or the shaders. Aborting."
+    | Some program => program
   };
 
 Gl.useProgram ::context program;
