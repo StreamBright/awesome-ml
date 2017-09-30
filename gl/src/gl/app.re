@@ -180,6 +180,11 @@ let render _ => {
         0.0, 0.0, 1.0, 1.0,
         0.0, 1.0, 0.0, 1.0
   |];
+
+  /*mvPushMatrix();
+  /mat4.rotate(mvMatrix, degToRad(rTri), [0, 1, 0]);
+  Gl.Mat4.rotate out::t matrix::t rad::float vec::array float
+  */
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::colorBuffer;
   Gl.bufferData
     ::context
@@ -198,6 +203,7 @@ let render _ => {
 
   /** Final call which actually does the "draw" **/
   Gl.drawArrays ::context mode::Constants.triangle_strip first::0 count::4
+  /*mvPopMatrix();*/
 };
 
 
