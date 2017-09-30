@@ -1,0 +1,26 @@
+{
+  "name": "gl",
+  "private": true,
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "bsb -make-world",
+    "clean": "bsb -clean-world",
+    "webpack": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "reason-react": ">=0.2.1",
+    "ReasonglInterface": "bsansouci/reasongl-interface",
+    "ReasonglWeb": "bsansouci/reasongl-web"
+  },
+  "devDependencies": {
+    "bs-platform": "^1.9.2",
+    "webpack": "^1.14.0"
+  }
+}

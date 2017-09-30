@@ -1,0 +1,13 @@
+{
+  "name" : "gl",
+  "reason" : {"react-jsx" : 2},
+  "bsc-flags": ["-bs-super-errors"],
+  "bs-dependencies": ["reason-react", "ReasonglInterface", "ReasonglWeb" ],
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": ["gl"]
+    }
+  ],
+  "namespace": true
+}
