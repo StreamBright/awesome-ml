@@ -8,6 +8,27 @@ type glEnv = {camera: glCamera, window: Gl.Window.t, context: Gl.contextT};
 /*Describes a SQUare in GL land*/
 type glSquare = {x: int, y: int, height: int, width: int};
 
+let getSquareVertices glSquare::(glSqr: glSquare) => [|
+    /* top right point */
+    float_of_int @@ glSqr.x + glSqr.width,  float_of_int @@ glSqr.y + glSqr.height,   0.0,
+    /* top left point */
+    float_of_int glSqr.x,                   float_of_int @@ glSqr.y + glSqr.height,   0.0,
+    /* bottom right point */
+    float_of_int @@ glSqr.x + glSqr.width,  float_of_int glSqr.y,                     0.0,
+    /* bottom left point */
+    float_of_int glSqr.x,                   float_of_int glSqr.y,                     0.0
+  |];
+
+let randomFloatOne () =>
+  Random.float 1.0;
+
+let getSquareColors () => [|
+    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
+    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
+    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
+    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne()
+|];
+
 let getCompiledCorrectly context::context shader::shader =>
   Gl.getShaderParameter context::context shader::shader paramName::Gl.Compile_status == 1;
 
@@ -141,8 +162,6 @@ Gl.Mat4.ortho
   near::0.
   far::100.;
 
-let randomFloatOne () =>
-  Random.float 1.0;
 
 /**
  * Render simply draws a rectangle.
@@ -154,16 +173,7 @@ let render _ => {
   /**
    * Setup vertices to be sent to the GPU and bind the data on the "register" called `array_buffer`.
    */
-  let square_vertices = [|
-    /* top right point */
-    float_of_int @@ glSqr.x + glSqr.width,  float_of_int @@ glSqr.y + glSqr.height,   0.0,
-    /* top left point */
-    float_of_int glSqr.x,                   float_of_int @@ glSqr.y + glSqr.height,   0.0,
-    /* bottom right point */
-    float_of_int @@ glSqr.x + glSqr.width,  float_of_int glSqr.y,                     0.0,
-    /* bottom left point */
-    float_of_int glSqr.x,                   float_of_int glSqr.y,                     0.0
-  |];
+  let square_vertices = getSquareVertices glSquare::glSqr;
 
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::vertexBuffer;
   Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_vertices)
@@ -177,12 +187,7 @@ let render _ => {
                           normalize::false stride::0 offset::0;
 
   /* What is the right range for colors? */
-  let square_colors = [|
-    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
-    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
-    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
-    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne()
-  |];
+  let square_colors = getSquareColors();
 
   /*mvPushMatrix();
   /mat4.rotate(mvMatrix, degToRad(rTri), [0, 1, 0]);
