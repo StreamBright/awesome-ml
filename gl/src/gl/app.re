@@ -79,7 +79,7 @@ let fragmentShaderSource = {|
 
 /** This initializes the window **/
 let window = Gl.Window.init argv::Sys.argv;
-let windowSize = 600;
+let windowSize = 800;
 
 Gl.Window.setWindowSize ::window width::windowSize height::windowSize;
 
@@ -143,10 +143,10 @@ Gl.Mat4.ortho
  */
 let render _ => {
   /* 0,0 is the bottom left corner */
-  let x = (Random.int 600);
-  let y = (Random.int 600);
-  let width = 200;
-  let height = 200;
+  let x = (Random.int 800);
+  let y = (Random.int 800);
+  let width = 20;
+  let height = 20;
 
   /**
    * Setup vertices to be sent to the GPU and bind the data on the "register" called `array_buffer`.
