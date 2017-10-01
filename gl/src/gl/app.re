@@ -117,17 +117,10 @@ Gl.viewport ::context x::0 y::0 width::windowSize height::windowSize;
 /* Gl.clearColor context 1.0 1.0 1.0 1.0; */
 Gl.clear ::context mask::(Constants.color_buffer_bit lor Constants.depth_buffer_bit);
 
-
-/** Camera is a simple record containing one matrix used to project a point in 3D onto the screen. **/
 let camera = {projectionMatrix: Gl.Mat4.create ()};
 
-/**
- * Those buffers are basically pointers to chunks of memory on the graphics card. They're used to store the
- * vertex and color data.
- */
 let vertexBuffer = Gl.createBuffer ::context;
 let colorBuffer = Gl.createBuffer ::context;
-
 
 /** Compiles the shaders and gets the program with the shaders loaded into **/
 let program =
@@ -163,48 +156,27 @@ Gl.Mat4.ortho
   far::100.;
 
 
-/**
- * Render simply draws a rectangle.
- */
 let render _ => {
   /* 0,0 is the bottom left corner */
   let glSqr = {x: (Random.int 800), y: (Random.int 800), height: 50, width: 50 };
-
-  /**
-   * Setup vertices to be sent to the GPU and bind the data on the "register" called `array_buffer`.
-   */
   let square_vertices = getSquareVertices glSquare::glSqr;
 
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::vertexBuffer;
   Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_vertices)
                 usage::Constants.static_draw;
-  /*
-   * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/vertexAttribPointer
-   * void gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
-   *
-   */
   Gl.vertexAttribPointer ::context attribute::aVertexPosition size::3 type_::Constants.float_
                           normalize::false stride::0 offset::0;
 
-  /* What is the right range for colors? */
   let square_colors = getSquareColors();
-
-  /*mvPushMatrix();
-  /mat4.rotate(mvMatrix, degToRad(rTri), [0, 1, 0]);
-  Gl.Mat4.rotate out::t matrix::t rad::float vec::array float
-  */
 
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::colorBuffer;
   Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_colors)
                 usage::Constants.static_draw;
-  /*    */
   Gl.vertexAttribPointer ::context attribute::aVertexColor size::4 type_::Constants.float_
                           normalize::false stride::0 offset::0;
   Gl.uniformMatrix4fv ::context location::pMatrixUniform value::camera.projectionMatrix;
 
-  /** Final call which actually does the "draw" **/
   Gl.drawArrays ::context mode::Constants.triangle_strip first::0 count::4
-  /*mvPopMatrix();*/
 };
 
 
