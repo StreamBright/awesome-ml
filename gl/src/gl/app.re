@@ -112,7 +112,6 @@ let program =
 
 Gl.useProgram ::context program;
 
-
 /** Get the attribs ahead of time to be used inside the render function **/
 let aVertexPosition = Gl.getAttribLocation ::context ::program name::"aVertexPosition";
 Gl.enableVertexAttribArray ::context attribute::aVertexPosition;
@@ -144,10 +143,10 @@ Gl.Mat4.ortho
  */
 let render _ => {
   /* 0,0 is the bottom left corner */
-  let x = 150;
-  let y = 150;
-  let width = 300;
-  let height = 300;
+  let x = ((Random.int 150) + 100);
+  let y = x;
+  let width = 200;
+  let height = 200;
 
   /**
    * Setup vertices to be sent to the GPU and bind the data on the "register" called `array_buffer`.
@@ -158,47 +157,26 @@ let render _ => {
     float_of_int @@ x + width,  float_of_int y,               0.0,
     float_of_int x,             float_of_int y,               0.0
   |];
-  /*Js.log square_vertices;*/
+
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::vertexBuffer;
-  Gl.bufferData
-    ::context
-    target::Constants.array_buffer
-    data::Gl.Bigarray.(of_array Float32 square_vertices)
-    usage::Constants.static_draw;
-  Gl.vertexAttribPointer
-    ::context
-    attribute::aVertexPosition
-    size::3
-    type_::Constants.float_
-    normalize::false
-    stride::0
-    offset::0;
+  Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_vertices) usage::Constants.static_draw;
+  Gl.vertexAttribPointer ::context attribute::aVertexPosition size::3 type_::Constants.float_ normalize::false stride::0 offset::0;
 
   let square_colors = [|
-        1.0, 0.0, 0.0, 1.0,
-        0.0, 1.0, 0.0, 1.0,
-        0.0, 0.0, 1.0, 1.0,
-        0.0, 1.0, 0.0, 1.0
+    (Random.float 1.0), (Random.float 1.0), (Random.float 1.0), (Random.float 1.0),
+    (Random.float 1.0), (Random.float 1.0), (Random.float 1.0), (Random.float 1.0),
+    (Random.float 1.0), (Random.float 1.0), (Random.float 1.0), (Random.float 1.0),
+    (Random.float 1.0), (Random.float 1.0), (Random.float 1.0), (Random.float 1.0)
   |];
 
   /*mvPushMatrix();
   /mat4.rotate(mvMatrix, degToRad(rTri), [0, 1, 0]);
   Gl.Mat4.rotate out::t matrix::t rad::float vec::array float
   */
+
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::colorBuffer;
-  Gl.bufferData
-    ::context
-    target::Constants.array_buffer
-    data::Gl.Bigarray.(of_array Float32 square_colors)
-    usage::Constants.static_draw;
-  Gl.vertexAttribPointer
-    ::context
-    attribute::aVertexColor
-    size::4
-    type_::Constants.float_
-    normalize::false
-    stride::0
-    offset::0;
+  Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_colors) usage::Constants.static_draw;
+  Gl.vertexAttribPointer ::context attribute::aVertexColor size::4 type_::Constants.float_ normalize::false stride::0 offset::0;
   Gl.uniformMatrix4fv ::context location::pMatrixUniform value::camera.projectionMatrix;
 
   /** Final call which actually does the "draw" **/
