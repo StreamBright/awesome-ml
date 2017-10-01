@@ -144,7 +144,7 @@ Gl.Mat4.ortho
 let render _ => {
   /* 0,0 is the bottom left corner */
   let x = ((Random.int 150) + 100);
-  let y = x;
+  let y = ((Random.int 150) + 100);
   let width = 200;
   let height = 200;
 
