@@ -6,7 +6,7 @@
   "sources": [
     {
       "dir": "src",
-      "subdirs": ["async", "flow", "sierpinski"]
+      "subdirs": ["async", "flow"]
     }
   ],
   "namespace": true

@@ -2,7 +2,11 @@ module Constants = RGLConstants;
 module Gl = Reasongl.Gl;
 
 type glCamera = {projectionMatrix: Gl.Mat4.t};
+
+/*is this used?*/
 type glEnv = {camera: glCamera, window: Gl.Window.t, context: Gl.contextT};
+/*Describes a SQUare in GL land*/
+type glSquare = {x: int, y: int, height: int, width: int};
 
 let getCompiledCorrectly context::context shader::shader =>
   Gl.getShaderParameter context::context shader::shader paramName::Gl.Compile_status == 1;
@@ -25,6 +29,7 @@ let linkProg ::context ::program ::vertexShader ::fragmentShader => {
 let getProgram
   context::(context: Gl.contextT) vertexShader::(vertexShaderSource: string)
   fragmentShader::(fragmentShaderSource: string) :option Gl.programT => {
+    Random.init 314;
     /* Starting with vertex shader */
     let vertexShader = Gl.createShader ::context Constants.vertex_shader;
     let compiledCorrectlyVertex = compileShaders context::context shader::vertexShader source::vertexShaderSource;
@@ -122,7 +127,6 @@ Gl.enableVertexAttribArray ::context attribute::aVertexColor;
 let pMatrixUniform = Gl.getUniformLocation ::context ::program name::"uPMatrix";
 Gl.uniformMatrix4fv ::context location::pMatrixUniform value::camera.projectionMatrix;
 
-
 /**
  * Will mutate the projectionMatrix to be an ortho matrix with the given boundaries.
  * See this link for quick explanation of what this is.
@@ -137,36 +141,45 @@ Gl.Mat4.ortho
   near::0.
   far::100.;
 
+let randomFloatOne () =>
+  Random.float 1.0;
 
 /**
  * Render simply draws a rectangle.
  */
 let render _ => {
   /* 0,0 is the bottom left corner */
-  let x = (Random.int 800);
-  let y = (Random.int 800);
-  let width = 20;
-  let height = 20;
+  let glSqr = {x: (Random.int 800), y: (Random.int 800), height: 50, width: 50 };
 
   /**
    * Setup vertices to be sent to the GPU and bind the data on the "register" called `array_buffer`.
    */
   let square_vertices = [|
-    float_of_int @@ x + width,  float_of_int @@ y + height,   0.0,
-    float_of_int x,             float_of_int @@ y + height,   0.0,
-    float_of_int @@ x + width,  float_of_int y,               0.0,
-    float_of_int x,             float_of_int y,               0.0
+    /* top right point */
+    float_of_int @@ glSqr.x + glSqr.width,  float_of_int @@ glSqr.y + glSqr.height,   0.0,
+    /* top left point */
+    float_of_int glSqr.x,                   float_of_int @@ glSqr.y + glSqr.height,   0.0,
+    /* bottom right point */
+    float_of_int @@ glSqr.x + glSqr.width,  float_of_int glSqr.y,                     0.0,
+    /* bottom left point */
+    float_of_int glSqr.x,                   float_of_int glSqr.y,                     0.0
   |];
 
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::vertexBuffer;
   Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_vertices) usage::Constants.static_draw;
+  /*
+   * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/vertexAttribPointer
+   * void gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
+   *
+   */
   Gl.vertexAttribPointer ::context attribute::aVertexPosition size::3 type_::Constants.float_ normalize::false stride::0 offset::0;
 
+  /* What is the right range for colors? */
   let square_colors = [|
-    (Random.float 1.0), (Random.float 1.0), (Random.float 1.0), (Random.float 1.0),
-    (Random.float 1.0), (Random.float 1.0), (Random.float 1.0), (Random.float 1.0),
-    (Random.float 1.0), (Random.float 1.0), (Random.float 1.0), (Random.float 1.0),
-    (Random.float 1.0), (Random.float 1.0), (Random.float 1.0), (Random.float 1.0)
+    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
+    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
+    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
+    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne()
   |];
 
   /*mvPushMatrix();
@@ -176,6 +189,7 @@ let render _ => {
 
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::colorBuffer;
   Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_colors) usage::Constants.static_draw;
+  /*    */
   Gl.vertexAttribPointer ::context attribute::aVertexColor size::4 type_::Constants.float_ normalize::false stride::0 offset::0;
   Gl.uniformMatrix4fv ::context location::pMatrixUniform value::camera.projectionMatrix;
 
