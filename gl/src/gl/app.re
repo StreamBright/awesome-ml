@@ -166,13 +166,15 @@ let render _ => {
   |];
 
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::vertexBuffer;
-  Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_vertices) usage::Constants.static_draw;
+  Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_vertices)
+                usage::Constants.static_draw;
   /*
    * https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/vertexAttribPointer
    * void gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
    *
    */
-  Gl.vertexAttribPointer ::context attribute::aVertexPosition size::3 type_::Constants.float_ normalize::false stride::0 offset::0;
+  Gl.vertexAttribPointer ::context attribute::aVertexPosition size::3 type_::Constants.float_
+                          normalize::false stride::0 offset::0;
 
   /* What is the right range for colors? */
   let square_colors = [|
@@ -188,9 +190,11 @@ let render _ => {
   */
 
   Gl.bindBuffer ::context target::Constants.array_buffer buffer::colorBuffer;
-  Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_colors) usage::Constants.static_draw;
+  Gl.bufferData ::context target::Constants.array_buffer data::Gl.Bigarray.(of_array Float32 square_colors)
+                usage::Constants.static_draw;
   /*    */
-  Gl.vertexAttribPointer ::context attribute::aVertexColor size::4 type_::Constants.float_ normalize::false stride::0 offset::0;
+  Gl.vertexAttribPointer ::context attribute::aVertexColor size::4 type_::Constants.float_
+                          normalize::false stride::0 offset::0;
   Gl.uniformMatrix4fv ::context location::pMatrixUniform value::camera.projectionMatrix;
 
   /** Final call which actually does the "draw" **/
