@@ -23,10 +23,10 @@ let randomFloatOne () =>
   Random.float 1.0;
 
 let getSquareColors () => [|
-    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
-    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
-    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne(),
-    randomFloatOne(), randomFloatOne(), randomFloatOne(), randomFloatOne()
+    1.0, 1.0, 1.0, 1.0,
+    0.0, 0.0, 0.0, 0.0,
+    1.0, 1.0, 1.0, 1.0,
+    0.0, 0.0, 0.0, 0.0
 |];
 
 let getCompiledCorrectly context::context shader::shader =>
