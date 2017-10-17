@@ -5,6 +5,9 @@ let modTime = 0.00001;
 let modVel = 0.02;
 let modDir = 0.05;
 
+external pi: float = "Math.PI" [@@bs.val];
+let tau = pi *. 2.0;
+
 /* externals */
 
 type simplex;

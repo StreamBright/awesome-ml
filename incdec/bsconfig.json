@@ -1,0 +1,12 @@
+{
+  "name" : "incdec",
+  "reason" : {"react-jsx" : 2},
+  "bs-dependencies": ["reason-react"],
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": ["time", "incdec"]
+    }
+  ],
+  "namespace": true
+}
